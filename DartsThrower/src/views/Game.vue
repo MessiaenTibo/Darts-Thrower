@@ -10,7 +10,7 @@ export default {
 
 <template>
   <div>
-    <h2>Home</h2>
+    <h2>Game</h2>
   </div>
 </template>
 <style scoped></style>

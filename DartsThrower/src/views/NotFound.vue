@@ -9,8 +9,8 @@ export default {
 </script>
 
 <template>
-  <div>
-    <h2>Home</h2>
+  <div class="flex justify-center items-center w-full h-screen">
+    <h2 class="text-4xl font-bold">404 Page not found</h2>
   </div>
 </template>
 <style scoped></style>

@@ -6,7 +6,7 @@ import AppFooter from '@/components/layout/AppFooter.vue';
 <template>
   <div class="text-black min-h-screen">
     <AppHeader />
-    <main class="relative h-full">
+    <main class="relative h-full p-4">
       <slot />
     </main>
   </div>
