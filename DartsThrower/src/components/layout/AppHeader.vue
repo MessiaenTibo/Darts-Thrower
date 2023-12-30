@@ -20,7 +20,7 @@ export default {
     <nav>
       <ul class="flex gap-4">
         <li class="cursor-pointer">
-          <router-link to="/game">Game</router-link>
+          <router-link to="/game/create">Game</router-link>
         </li>
         <li class="cursor-pointer">
           <router-link to="/history">History</router-link>
