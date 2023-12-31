@@ -36,7 +36,7 @@ export default defineComponent({
       >
         <Check :size="16" stroke="white" stroke-width="4" />
       </div>
-      <div>{{ title }}</div>
+      <div class="font-medium">{{ title }}</div>
     </div>
     <div v-else class="flex gap-4">
       <div
@@ -44,7 +44,7 @@ export default defineComponent({
       >
         <div class="text-white font-medium">{{ number }}</div>
       </div>
-      <div>{{ title }}</div>
+      <div class="font-medium">{{ title }}</div>
     </div>
   </div>
   <div v-else class="flex gap-4 opacity-40">
@@ -53,6 +53,6 @@ export default defineComponent({
     >
       <div class="text-white font-medium">{{ number }}</div>
     </div>
-    <div>{{ title }}</div>
+    <div class="font-medium">{{ title }}</div>
   </div>
 </template>
