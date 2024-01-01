@@ -2,6 +2,7 @@
 import Step from '@/components/generic/Step.vue';
 import StepLine from '@/components/generic/StepLine.vue';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default {
   components: {
@@ -10,6 +11,9 @@ export default {
   },
 
   setup() {
+    // Router
+    const { push } = useRouter();
+
     // Variables
     // Game type
     const gameType = ref();
@@ -23,9 +27,27 @@ export default {
     const amountOfLegsOrSets = ref(1);
     // Configure game
     const configureGameActive = ref(false);
+    // Players
+    const players = ref([
+      {
+        id: 1,
+        name: 'Player 1',
+      },
+    ]);
 
     const handleSubmit = () => {
       console.log('submit');
+      push({
+        name: 'Game',
+        query: {
+          gameType: gameType.value,
+          scoreType: scoreType.value,
+          type: type.value,
+          legsOrSets: legsOrSets.value,
+          amountOfLegsOrSets: amountOfLegsOrSets.value,
+          players: JSON.stringify(players.value),
+        },
+      });
     };
 
     const handleGameTypeChange = (event: Event) => {
@@ -43,6 +65,36 @@ export default {
       configureGameActive.value = true;
     };
 
+    const handlePlayerAmountChange = (amount: number) => {
+      // Remove extra players
+      players.value = players.value.slice(0, amount);
+
+      // Add extra players
+      for (let i = 1; i <= amount; i++) {
+        if (players.value.length < amount) {
+          players.value.push({
+            id: players.value.length + 1,
+            name: `Player ${players.value.length + 1}`,
+          });
+        }
+      }
+      console.log(players.value);
+      console.log(amount);
+    };
+
+    const handlePlayerNameChange = (event: Event, playerId: number) => {
+      const target = event.target as HTMLInputElement;
+      const oldPlayers = players.value;
+      const newPlayers = oldPlayers.map((player) => {
+        if (player.id === playerId) {
+          player.name = target.value;
+        }
+        return player;
+      });
+      players.value = newPlayers;
+      console.log(players.value);
+    };
+
     return {
       handleSubmit,
       handleGameTypeChange,
@@ -51,6 +103,9 @@ export default {
       handleContinue,
       configureGameActive,
       gameType,
+      handlePlayerAmountChange,
+      players,
+      handlePlayerNameChange,
     };
   },
 };
@@ -59,7 +114,7 @@ export default {
 <template>
   <div>
     <h2>Creating a game</h2>
-    <form action.default="handleSubmit" class="max-w-lg">
+    <form @submit.prevent="handleSubmit" class="max-w-lg">
       <div>
         <Step
           :number="1"
@@ -162,13 +217,13 @@ export default {
                   name="type"
                   id="type1"
                   class="hidden peer/type1"
-                  value="race-to"
+                  value="first-to"
                   checked
                 />
                 <label
                   for="type1"
                   class="border border-gray-400 w-full text-center peer-checked/type1:border-green-500"
-                  >Race to</label
+                  >First to</label
                 >
               </div>
               <div class="flex w-full">
@@ -199,17 +254,18 @@ export default {
               <select
                 name="legsOrSets"
                 id="legsOrSets"
-                class="w-full border border-gray-500 focus-within:border-green-500"
+                class="w-full border border-gray-500 focus-within:border-green-500 text-center"
                 @change="handleLegsOrSetsChange"
               >
                 <option value="legs">Legs</option>
                 <option value="sets">Sets</option>
               </select>
-              <div class="flex gap-2">
+              <div class="flex gap-2 justify-center items-center">
                 <input
                   type="checkbox"
                   name="doubleCheckout"
                   id="doubleCheckout"
+                  checked
                 />
                 <label for="doubleCheckout" class="leading-4"
                   >Double Checkout</label
@@ -221,6 +277,7 @@ export default {
                 type="button"
                 class="py-2 px-4 bg-green-500 rounded-md"
                 @click="handleContinue"
+                v-if="!configureGameActive"
               >
                 CONTINUE
               </button>
@@ -238,7 +295,7 @@ export default {
           :active="configureGameActive"
           :completed="false"
         />
-        <div v-if="configureGameActive">
+        <div v-if="configureGameActive" class="flex flex-col gap-3">
           <fieldset class="grid grid-cols-4 w-full">
             <legend>Number of players</legend>
             <div class="flex w-full">
@@ -249,6 +306,7 @@ export default {
                 value="1"
                 class="hidden peer/playerAmount1"
                 checked
+                @change="handlePlayerAmountChange(1)"
               />
               <label
                 for="playerAmount1"
@@ -263,6 +321,7 @@ export default {
                 id="playerAmount2"
                 value="2"
                 class="hidden peer/playerAmount2"
+                @change="handlePlayerAmountChange(2)"
               />
               <label
                 for="playerAmount2"
@@ -277,6 +336,7 @@ export default {
                 id="playerAmount3"
                 value="3"
                 class="hidden peer/playerAmount3"
+                @change="handlePlayerAmountChange(3)"
               />
               <label
                 for="playerAmount3"
@@ -290,7 +350,8 @@ export default {
                 name="playerAmount"
                 id="playerAmount4"
                 value="4"
-                class="hidden peer/scoreType4"
+                class="hidden peer/playerAmount4"
+                @change="handlePlayerAmountChange(4)"
               />
               <label
                 for="playerAmount4"
@@ -299,6 +360,28 @@ export default {
               >
             </div>
           </fieldset>
+          <div
+            v-for="player of players"
+            :key="player.id"
+            class="grid grid-cols-5 gap-2 items-center"
+          >
+            <div class="text-center font-medium">
+              {{ player.id }}
+            </div>
+            <input
+              type="text"
+              name="playerName"
+              id="playerName"
+              :value="player.name"
+              class="border border-gray-500 focus-within:outline-none col-span-4"
+              @input="(event) => handlePlayerNameChange(event, player.id)"
+            />
+          </div>
+          <div class="flex justify-end">
+            <button type="submit" class="py-2 px-4 bg-green-500 rounded-md">
+              START GAME
+            </button>
+          </div>
         </div>
       </div>
     </form>

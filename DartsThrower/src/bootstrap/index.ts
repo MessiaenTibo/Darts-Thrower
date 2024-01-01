@@ -17,6 +17,11 @@ export const router = createRouter({
             component: () => import('@/views/game/CreateGame.vue'),
         },
         {
+            path: '/game',
+            name: 'Game',
+            component: () => import('@/views/game/Game.vue'),
+        },
+        {
             path: '/:pathMatch(.*)*',
             name: 'NotFound',
             component: () => import('@/views/NotFound.vue'),
