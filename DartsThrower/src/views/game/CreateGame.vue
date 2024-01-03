@@ -19,9 +19,9 @@ export default {
     const gameType = ref();
     const gameTypeActive = ref(false);
     // Score type
-    const scoreType = ref();
+    const scoreType = ref('501');
     // Type
-    const type = ref();
+    const type = ref('first-to');
     // Legs or sets
     const legsOrSets = ref('legs');
     const amountOfLegsOrSets = ref(1);
@@ -106,13 +106,15 @@ export default {
       handlePlayerAmountChange,
       players,
       handlePlayerNameChange,
+      type,
+      scoreType,
     };
   },
 };
 </script>
 
 <template>
-  <div>
+  <div class="p-4">
     <h2>Creating a game</h2>
     <form @submit.prevent="handleSubmit" class="max-w-lg">
       <div>
@@ -158,6 +160,7 @@ export default {
                   id="scoreType1"
                   value="170"
                   class="hidden peer/scoreType1"
+                  @input="scoreType = '170'"
                 />
                 <label
                   for="scoreType1"
@@ -172,6 +175,7 @@ export default {
                   id="scoreType2"
                   value="301"
                   class="hidden peer/scoreType2"
+                  @input="scoreType = '301'"
                 />
                 <label
                   for="scoreType2"
@@ -187,6 +191,7 @@ export default {
                   value="501"
                   class="hidden peer/scoreType3"
                   checked
+                  @input="scoreType = '501'"
                 />
                 <label
                   for="scoreType3"
@@ -201,6 +206,7 @@ export default {
                   id="scoreType4"
                   value="701"
                   class="hidden peer/scoreType4"
+                  @input="scoreType = '701'"
                 />
                 <label
                   for="scoreType4"
@@ -219,6 +225,7 @@ export default {
                   class="hidden peer/type1"
                   value="first-to"
                   checked
+                  @input="type = 'first-to'"
                 />
                 <label
                   for="type1"
@@ -233,6 +240,7 @@ export default {
                   id="type2"
                   value="best-of"
                   class="hidden peer/type2"
+                  @input="type = 'best-of'"
                 />
                 <label
                   for="type2"
